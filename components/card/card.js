@@ -1,0 +1,46 @@
+import Image from "next/image";
+import styles from "./card.module.css";
+import { motion } from "framer-motion";
+import cls from "classnames";
+import { useState } from "react";
+
+const Card = (props) => {
+  const {
+    imgUrl = "https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1459&q=80",
+    size = "medium",
+  } = props;
+
+  const [imgSrc, setImgSrc] = useState(imgUrl);
+
+  const classMap = {
+    large: styles.lgItem,
+    medium: styles.mdItem,
+    small: styles.smItem,
+  };
+
+  const handleOnError = () => {
+    console.log("error on Img");
+    setImgSrc(
+      "https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1459&q=80"
+    );
+  };
+
+  return (
+    <div className={styles.container}>
+      <motion.div
+        className={cls(styles.imgMotionWrapper, classMap[size])}
+        whileHover={{ scale: 1.2 }}
+      >
+        <Image
+          src={imgSrc}
+          alt="imgUrl"
+          layout="fill"
+          onError={handleOnError}
+          className={styles.cardImg}
+        />
+      </motion.div>
+    </div>
+  );
+};
+
+export default Card;
