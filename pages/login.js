@@ -1,23 +1,39 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Login.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { magic } from "../lib/magic-client";
 import Router, { useRouter } from "next/router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [userMsg, setUserMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
+  // to fix the hanging after Loading Magic token
+  useEffect(() => {
+    const handleComplete = () => {
+      setIsLoading(false);
+    };
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router]);
+
   const handleOnChangeEmail = (e) => {
     setUserMsg("");
-    console.log("event", e);
+
     const email = e.target.value;
     setEmail(email);
   };
 
-  const handleLoginWithEmail = (e) => {
+  const handleLoginWithEmail = async (e) => {
     e.preventDefault();
     console.log("Login");
 
@@ -27,8 +43,23 @@ const Login = () => {
       // route to dashboard
       console.log({ email });
       if (email === "same.dan@gmail.com") {
-        console.log("good email");
-        router.push("/");
+        // log in a user by their email
+        setIsLoading(true);
+        try {
+          const didToken = await magic.auth.loginWithMagicLink({
+            email: email,
+          });
+          console.log({ didToken });
+          if (didToken) {
+            // setIsLoading(false); fix loading hanging on magik
+            router.push("/");
+          }
+        } catch {
+          // Handle errors if required!
+          setIsLoading(false);
+          console.error("Smth went wrong with Magic Link", error);
+        }
+        // router.push("/");
       } else {
         setUserMsg("Smth went wrong logging in");
       }
@@ -76,7 +107,7 @@ const Login = () => {
           />
           <p className={styles.userMsg}>{userMsg}</p>
           <button onClick={handleLoginWithEmail} className={styles.loginBtn}>
-            Sign In
+            {isLoading ? "Loading... " : "Sign In"}
           </button>
         </div>
       </main>
