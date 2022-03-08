@@ -35,6 +35,7 @@ export default function Home({
         {/* <h1>Netflix</h1> */}
         <NavBar username="dan@curuletz.com" />
         <Banner
+          videoId="uw6sI24LwYY"
           title="Clifford the red dog"
           subTitle="a very cute dog"
           imgUrl="/static/clifford.webp"

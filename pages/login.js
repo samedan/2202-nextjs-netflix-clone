@@ -42,7 +42,8 @@ const Login = () => {
     if (email && email.match(mailformat)) {
       // route to dashboard
       console.log({ email });
-      if (email === "same.dan@gmail.com") {
+      // if (email === "same.dan@gmail.com") {
+      if (email) {
         // log in a user by their email
         setIsLoading(true);
         try {
