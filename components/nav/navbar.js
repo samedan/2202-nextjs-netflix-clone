@@ -9,15 +9,19 @@ const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [username, setUsername] = useState("");
 
-  useEffect(async () => {
-    try {
-      const { email } = await magic.user.getMetadata();
-      if (email) {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { email } = await magic.user.getMetadata();
+        if (email) {
+          setUsername(email);
+        }
+      } catch (error) {
+        // Handle errors if required!
+        console.error("Error retrieving email", error);
       }
-    } catch {
-      // Handle errors if required!
-      console.error("Error retrieving email", error);
     }
+    fetchData();
   }, []);
 
   const router = useRouter();
@@ -35,6 +39,18 @@ const NavBar = () => {
   const handleShowDropdown = (e) => {
     e.preventDefault();
     setShowDropdown(!showDropdown);
+  };
+
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    try {
+      await magic.user.logout();
+      console.log("isLoggedIn", await magic.user.isLoggedIn()); // => false
+      router.push("/login");
+    } catch (error) {
+      console.error("Error logging out", error);
+      router.push("/login");
+    }
   };
 
   return (
@@ -80,9 +96,10 @@ const NavBar = () => {
               <div className={styles.navDropdown}>
                 <div>
                   <div className={styles.navItem}>
-                    <Link href="/login">
-                      <a className={styles.linkName}>Sign out</a>
-                    </Link>
+                    <a className={styles.linkName} onClick={handleSignOut}>
+                      Sign out
+                    </a>
+
                     <div className={styles.lineWrapper}></div>
                   </div>
                 </div>
