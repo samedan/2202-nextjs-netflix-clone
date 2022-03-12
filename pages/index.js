@@ -9,19 +9,22 @@ import { getPopularVideos, getVideos } from "../lib/videos";
 // on Server Side
 export async function getServerSideProps() {
   const disneyVideos = await getVideos("disney trailer");
-  const productivityVideos = await getVideos("productivity");
-  const travelVideos = await getVideos("travel");
-  const popularVideos = await getPopularVideos("disney trailer");
+  // const productivityVideos = await getVideos("productivity");
+  // const travelVideos = await getVideos("travel");
+  // const popularVideos = await getPopularVideos("disney trailer");
   return {
-    props: { disneyVideos, productivityVideos, travelVideos, popularVideos },
+    props: {
+      disneyVideos,
+      //  productivityVideos, travelVideos, popularVideos
+    },
   };
 }
 
 export default function Home({
   disneyVideos,
-  travelVideos,
-  productivityVideos,
-  popularVideos,
+  // travelVideos,
+  // productivityVideos,
+  // popularVideos,
 }) {
   return (
     <div className={styles.container}>
@@ -42,13 +45,13 @@ export default function Home({
         />
         <div className={styles.sectionWrapper}>
           <SectionCards title="Disney" videos={disneyVideos} size="large" />
-          <SectionCards title="Travel" videos={travelVideos} size="small" />
+          {/* <SectionCards title="Travel" videos={travelVideos} size="small" />
           <SectionCards
             title="Productivity"
             videos={productivityVideos}
             size="medium"
           />
-          <SectionCards title="Popular" videos={popularVideos} size="small" />
+          <SectionCards title="Popular" videos={popularVideos} size="small" /> */}
         </div>
       </div>
     </div>

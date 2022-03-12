@@ -4,25 +4,25 @@ import { Link } from "next/link";
 import Loading from "../loading/loading";
 
 const SectionCards = (props) => {
-  const { title, videos, size } = props;
-  // console.log({ videos });
+  const { title, videos = [], size } = props;
+  console.log({ videos });
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.cardWrapper}>
         {videos.map((video, idx) => {
-          // console.log({ video });
-          if (video) {
-            return (
-              <>
-                <Link href={`/video/${video.id}`} passHref>
-                  <Card id={idx} size={size} key={idx} imgUrl={video.imgUrl} />
-                </Link>
-              </>
-            );
-          } else {
-            return <Loading />;
-          }
+          console.log(video);
+          console.log(video.id);
+
+          // return (
+          //   <>
+          //     <Link href={`/video/${video.id}`} passHref>
+          //       <a>
+          //         <Card id={idx} size={size} key={idx} imgUrl={video.imgUrl} />
+          //       </a>
+          //     </Link>
+          //   </>
+          // );
         })}
       </div>
     </section>

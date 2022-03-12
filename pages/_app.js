@@ -38,7 +38,8 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router]);
 
-  return isLoading ? <Loading /> : <Component {...pageProps} />;
+  // return isLoading ? <Loading /> : <Component {...pageProps} />;
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;
