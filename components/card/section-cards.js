@@ -14,15 +14,15 @@ const SectionCards = (props) => {
           console.log(video);
           console.log(video.id);
 
-          // return (
-          //   <>
-          //     <Link href={`/video/${video.id}`} passHref>
-          //       <a>
-          //         <Card id={idx} size={size} key={idx} imgUrl={video.imgUrl} />
-          //       </a>
-          //     </Link>
-          //   </>
-          // );
+          return (
+            // <Link href={`/video/${video.id}`} passHref key={idx}>
+
+            <a href={`/video/${video.id}`} key={idx}>
+              <Card id={idx} size={size} imgUrl={video.imgUrl} />
+            </a>
+
+            // </Link>
+          );
         })}
       </div>
     </section>
