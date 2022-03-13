@@ -5,14 +5,14 @@ import Loading from "../loading/loading";
 
 const SectionCards = (props) => {
   const { title, videos = [], size } = props;
-  console.log({ videos });
+  // console.log({ videos });
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.cardWrapper}>
         {videos.map((video, idx) => {
-          console.log(video);
-          console.log(video.id);
+          // console.log(video);
+          // console.log(video.id);
 
           return (
             // <Link href={`/video/${video.id}`} passHref key={idx}>

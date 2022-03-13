@@ -8,7 +8,7 @@ const Banner = (props) => {
   const { title, subTitle, imgUrl, videoId } = props;
 
   const handleOnPlay = () => {
-    console.log("handleOnPlay");
+    // console.log("handleOnPlay");
     router.push(`/video/${videoId}`);
   };
   return (
