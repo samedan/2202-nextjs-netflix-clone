@@ -5,7 +5,6 @@ import styles from "../styles/Home.module.css";
 import Banner from "./../components/banner/banner";
 import SectionCards from "./../components/card/section-cards";
 import { getPopularVideos, getVideos } from "../lib/videos";
-import { startFetchMyQuery } from "../lib/db/hasura";
 
 // on Server Side
 export async function getServerSideProps() {
@@ -27,7 +26,6 @@ export default function Home({
   // productivityVideos,
   // popularVideos,
 }) {
-  startFetchMyQuery();
   return (
     <div className={styles.container}>
       <Head>
