@@ -13,7 +13,7 @@ export default async function login(req, res) {
       const metadata = await magicAdmin.users.getMetadataByToken(didToken);
       console.log({ metadata });
 
-      // create jwt
+      // create jwt with JWT Web Token
       const token = jwt.sign(
         {
           ...metadata,
@@ -26,9 +26,10 @@ export default async function login(req, res) {
           },
         },
         // secret hasura
-        process.env.JWT_SECRET_FROM_HASURA
+        // process.env.JWT_SECRET_FROM_HASURA
+        "thisisasecretthisisasecret5876876"
       );
-      console.log("issuer", metadata.issuer);
+      console.log("token from JWT", token);
 
       const isNewUserQuery = await isNewUser(token, metadata.issuer);
       console.log("isNewUserQuery", isNewUserQuery);

@@ -17,8 +17,6 @@ export async function getStaticProps(context) {
   //   viewCount: 1000,
   // };
 
-  console.log({ context });
-
   const videoId = context.params.videoId;
 
   const videoArray = await getYoutubeVideoById(videoId);
