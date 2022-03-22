@@ -50,6 +50,7 @@ const Login = () => {
           const didToken = await magic.auth.loginWithMagicLink({
             email: email,
           });
+          console.log("didToken coming from Magic");
           console.log({ didToken });
           if (didToken) {
             // setIsLoading(false); fix loading hanging on magik

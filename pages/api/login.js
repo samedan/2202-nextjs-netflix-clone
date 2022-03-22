@@ -6,19 +6,20 @@ export default async function login(req, res) {
   if (req.method === "POST") {
     try {
       const auth = req.headers.authorization;
-      console.log(auth);
+
       // Take out 'Bearer_'
       const didToken = auth ? auth.substr(7) : "";
-      // invoke Magic server token
-      const metadata = await magicAdmin.users.getMetadataByToken(didToken);
-      console.log({ metadata });
 
-      // create jwt with JWT Web Token
+      // invoke Magic server token and
+      // get additional info (Metadata) with magicAdmin
+      const metadata = await magicAdmin.users.getMetadataByToken(didToken);
+
+      // create jwt
       const token = jwt.sign(
         {
           ...metadata,
-          iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000 + 7 * 24 * 60 * 60),
+          iat: Math.floor(Date.now() / 1000 - 30),
+          exp: Math.floor(Date.now() / 1000 + 7 * 24 * 60 * 60), //7 Days
           "https://hasura.io/jwt/claims": {
             "x-hasura-allowed-roles": ["user", "admin"],
             "x-hasura-default-role": "user",
@@ -26,17 +27,16 @@ export default async function login(req, res) {
           },
         },
         // secret hasura
-        // process.env.JWT_SECRET_FROM_HASURA
-        "thisisasecretthisisasecret5876876"
+        process.env.JWT_SECRET_FROM_HASURA
       );
-      console.log("token from JWT", token);
 
-      const isNewUserQuery = await isNewUser(token, metadata.issuer);
-      console.log("isNewUserQuery", isNewUserQuery);
+      // console.log("token from JWT sent to Hasura", token);
+
+      const isNewUserQuery = await isNewUser(token);
 
       res.send({ done: true, isNewUserQuery });
     } catch (error) {
-      console.error("Smth went wrong loggin in", error);
+      console.error("Smth went wrong logging in", error);
       res.status(500).send({ done: false });
     }
   } else {
