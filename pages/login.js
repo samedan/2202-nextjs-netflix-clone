@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [userMsg, setUserMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInvisible, setIsInvisible] = useState(false);
 
   const router = useRouter();
 
@@ -47,6 +48,7 @@ const Login = () => {
         // log in a user by their email
         setIsLoading(true);
         try {
+          setIsInvisible(true);
           const didToken = await magic.auth.loginWithMagicLink({
             email: email,
           });
@@ -54,18 +56,39 @@ const Login = () => {
           console.log({ didToken });
           if (didToken) {
             // setIsLoading(false); fix loading hanging on magik
-            router.push("/");
+            const response = await fetch("/api/login", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${didToken}`,
+                "Content-Type": "application/json",
+              },
+            });
+
+            const loggedInResponse = await response.json();
+            if (loggedInResponse.done) {
+              console.log({ loggedInResponse });
+              setIsInvisible(false);
+              router.push("/");
+            } else {
+              setIsLoading(false);
+              setIsInvisible(false);
+              setUserMsg("Smth went wrong loggin in");
+            }
           }
         } catch {
           // Handle errors if required!
           setIsLoading(false);
+          setIsInvisible(false);
           console.error("Smth went wrong with Magic Link", error);
         }
         // router.push("/");
       } else {
+        setIsLoading(false);
+        setIsInvisible(false);
         setUserMsg("Smth went wrong logging in");
       }
     } else {
+      setIsInvisible(false);
       setUserMsg("Please enter a valid email address");
       // return (false)
     }
@@ -100,13 +123,26 @@ const Login = () => {
       </header>
       <main className={styles.main}>
         <div className={styles.mainWrapper}>
-          <h1 className={styles.signinHeader}>Sign In</h1>
-          <input
-            type="text"
-            placeholder="Email Address"
-            className={styles.emailInput}
-            onChange={handleOnChangeEmail}
-          />
+          {!isInvisible ? (
+            <>
+              <h1 className={styles.signinHeader}>Sign In</h1>
+
+              <input
+                type="text"
+                placeholder="Email Address"
+                className={styles.emailInput}
+                onChange={handleOnChangeEmail}
+              />
+            </>
+          ) : (
+            <Image
+              src={"/static/loading.gif"}
+              alt="Loading"
+              width="20px"
+              height="20px"
+            />
+          )}
+
           <p className={styles.userMsg}>{userMsg}</p>
           <button onClick={handleLoginWithEmail} className={styles.loginBtn}>
             {isLoading ? "Loading... " : "Sign In"}

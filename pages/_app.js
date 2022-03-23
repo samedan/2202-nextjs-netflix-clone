@@ -10,19 +10,19 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const isLoggedIn = await magic.user.isLoggedIn();
-  //     if (isLoggedIn) {
-  //       // route to /
-  //       router.push("/");
-  //     } else {
-  //       // route to '/login
-  //       router.push("/login");
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const isLoggedIn = await magic.user.isLoggedIn();
+      if (isLoggedIn) {
+        // route to /
+        router.push("/");
+      } else {
+        // route to '/login
+        router.push("/login");
+      }
+    }
+    fetchData();
+  }, []);
 
   // to fix the hanging after Loading Magic token
   useEffect(() => {
