@@ -27,7 +27,7 @@ export default function Home({
   // productivityVideos,
   // popularVideos,
 }) {
-  startFetchMyQuery();
+  // startFetchMyQuery();
   return (
     <div className={styles.container}>
       <Head>

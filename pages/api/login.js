@@ -1,6 +1,6 @@
 import { magicAdmin } from "../../lib/magic";
 import jwt from "jsonwebtoken";
-import { isNewUser } from "../../lib/db/hasura";
+import { isNewUser, createNewUser } from "../../lib/db/hasura";
 
 export default async function login(req, res) {
   if (req.method === "POST") {
@@ -18,7 +18,7 @@ export default async function login(req, res) {
       const token = jwt.sign(
         {
           ...metadata,
-          iat: Math.floor(Date.now() / 1000 - 30),
+          iat: Math.floor(Date.now() / 1000 - 720),
           exp: Math.floor(Date.now() / 1000 + 7 * 24 * 60 * 60), //7 Days
           "https://hasura.io/jwt/claims": {
             "x-hasura-allowed-roles": ["user", "admin"],
@@ -30,11 +30,16 @@ export default async function login(req, res) {
         process.env.JWT_SECRET_FROM_HASURA
       );
 
-      // console.log("token from JWT sent to Hasura", token);
-
-      const isNewUserQuery = await isNewUser(token);
-
-      res.send({ done: true, isNewUserQuery });
+      const isNewUserQuery = await isNewUser(token, metadata.issuer);
+      if (isNewUserQuery) {
+        // create a NEW USER
+        const createNewUserMutation = await createNewUser(token, metadata);
+        console.log({ createNewUserMutation });
+        res.send({ done: true, msg: "is a new user" });
+      } else {
+        // OLD USER
+        res.send({ done: true, msg: "not a new user" });
+      }
     } catch (error) {
       console.error("Smth went wrong logging in", error);
       res.status(500).send({ done: false });
