@@ -4,23 +4,17 @@ import styles from "../../styles/video.module.css";
 import clsx from "classnames";
 import { getYoutubeVideoById } from "../../lib/videos";
 import NavBar from "../../components/nav/navbar";
+import Like from "./../../components/icons/like-icon";
+import DisLike from "./../../components/icons/dislike-icon";
+import { useState } from "react";
 
 Modal.setAppElement("#__next");
 
 export async function getStaticProps(context) {
-  // const video = {
-  //   title: "Doggie",
-  //   publishTime: "2022-03-08",
-  //   description:
-  //     "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum The Extremes of Good and Evil by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a line in section 1.10.32.n",
-  //   channelTitle: "Paramount",
-  //   viewCount: 1000,
-  // };
-
   const videoId = context.params.videoId;
 
   const videoArray = await getYoutubeVideoById(videoId);
-  // console.log(videoArray);
+
   return {
     props: {
       video: videoArray.length > 0 ? videoArray[0] : {},
@@ -40,8 +34,8 @@ export async function getStaticPaths() {
 const Video = ({ video }) => {
   const router = useRouter();
 
-  // const videoId = "HFw2pGHkCz4";
-  // const videoArray = await getYoutubeVideoById(videoId);
+  const [toggleLike, setToggleLike] = useState(false);
+  const [toggleDislike, setToggleDislike] = useState(false);
 
   const {
     title,
@@ -50,6 +44,15 @@ const Video = ({ video }) => {
     channelTitle,
     statistics: { viewCount } = { viewCount: 0 },
   } = video;
+
+  const handleToggleDislike = () => {
+    setToggleDislike(!toggleDislike);
+    setToggleLike(toggleDislike);
+  };
+  const handleToggleLike = () => {
+    setToggleLike(!toggleLike);
+    setToggleDislike(toggleLike);
+  };
 
   return (
     <div className={styles.container}>
@@ -70,6 +73,21 @@ const Video = ({ video }) => {
           src={`http://www.youtube.com/embed/${router.query.videoId}?enablejsapi=1&&autoplay=0&origin=http://example.com&controls=0&rel=0`}
           frameBorder="0"
         ></iframe>
+        <div className={styles.likeDislikeBtnWrapper}>
+          <div className={styles.likeBtnWrapper}>
+            <button onClick={handleToggleLike}>
+              <div className={styles.btnWrapper}>
+                <Like selected={toggleLike} />
+              </div>
+            </button>
+          </div>
+
+          <button onClick={handleToggleDislike}>
+            <div className={styles.btnWrapper}>
+              <DisLike selected={toggleDislike} />
+            </div>
+          </button>
+        </div>
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
             <div className={styles.col1}>
