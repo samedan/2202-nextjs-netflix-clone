@@ -1,32 +1,56 @@
-import jwt from "jsonwebtoken";
-import { findVideoIdByUser } from "../../lib/db/hasura";
+import {
+  findVideoIdByUser,
+  updateStats,
+  insertStats,
+} from "../../lib/db/hasura";
+import { verifyToken } from "../../lib/utils";
 
-export default async function stats(req, res) {
-  if (req.method === "POST") {
-    try {
-      const token = req.cookies.token;
-      if (!token) {
-        res.status(403).send({});
-      } else {
-        //api/stats?videoId=uw6sI24LwYY
-        const videoId = req.query.videoId;
-        const decodedToken = jwt.verify(
-          token,
-          process.env.JWT_SECRET_FROM_HASURA
-        );
-        const userId = decodedToken.issuer;
-        const doesStatsExits = await findVideoIdByUser(token, userId, videoId);
-        if (doesStatsExits) {
-          // update it
+export default async function stats(req, resp) {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      resp.status(403).send({});
+    } else {
+      const inputParams = req.method === "POST" ? req.body : req.query;
+      const { videoId } = inputParams;
+      if (videoId) {
+        const userId = await verifyToken(token);
+        const findVideo = await findVideoIdByUser(token, userId, videoId);
+        const doesStatsExist = findVideo?.length > 0;
+
+        if (req.method === "POST") {
+          const { favourited, watched = true } = req.body;
+          if (doesStatsExist) {
+            // update it
+            const response = await updateStats(token, {
+              watched,
+              userId,
+              videoId,
+              favourited,
+            });
+            resp.send({ data: response });
+          } else {
+            // add it
+            const response = await insertStats(token, {
+              watched,
+              userId,
+              videoId,
+              favourited,
+            });
+            resp.send({ data: response });
+          }
         } else {
-          // create it
+          if (doesStatsExist) {
+            resp.send(findVideo);
+          } else {
+            resp.status(404);
+            resp.send({ user: null, msg: "Video not found" });
+          }
         }
-
-        res.send({ msg: "stats works", decodedToken, findVideoId });
       }
-    } catch (error) {
-      console.error("Error occured /stats", error);
-      res.status(500).send({ done: false, error: error?.message });
     }
+  } catch (error) {
+    console.error("Error occurred /stats", error);
+    resp.status(500).send({ done: false, error: error?.message });
   }
 }
