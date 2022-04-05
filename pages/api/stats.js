@@ -11,13 +11,14 @@ export default async function stats(req, resp) {
     if (!token) {
       resp.status(403).send({});
     } else {
+      // decide between POST and GET
       const inputParams = req.method === "POST" ? req.body : req.query;
       const { videoId } = inputParams;
       if (videoId) {
         const userId = await verifyToken(token);
         const findVideo = await findVideoIdByUser(token, userId, videoId);
         const doesStatsExist = findVideo?.length > 0;
-
+        // POST request
         if (req.method === "POST") {
           const { favourited, watched = true } = req.body;
           if (doesStatsExist) {
@@ -40,6 +41,7 @@ export default async function stats(req, resp) {
             resp.send({ data: response });
           }
         } else {
+          // GET request
           if (doesStatsExist) {
             resp.send(findVideo);
           } else {
