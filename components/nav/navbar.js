@@ -47,10 +47,17 @@ const NavBar = () => {
 
   const handleSignOut = async (e) => {
     e.preventDefault();
+
     try {
-      await magic.user.logout();
-      console.log("isLoggedIn", await magic.user.isLoggedIn()); // => false
-      router.push("/login");
+      const response = await fetch("/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${didToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const res = await response.json();
     } catch (error) {
       console.error("Error logging out", error);
       router.push("/login");
