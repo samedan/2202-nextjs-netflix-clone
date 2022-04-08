@@ -135,12 +135,14 @@ const Login = () => {
               />
             </>
           ) : (
-            <Image
-              src={"/static/loading.gif"}
-              alt="Loading"
-              width="20px"
-              height="20px"
-            />
+            <>
+              <Image
+                src={"/static/loading.gif"}
+                alt="Loading"
+                width="20px"
+                height="20px"
+              />
+            </>
           )}
 
           <p className={styles.userMsg}>{userMsg}</p>

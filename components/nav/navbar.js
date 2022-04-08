@@ -19,6 +19,7 @@ const NavBar = () => {
         console.log({ didToken });
         if (email) {
           setUsername(email);
+          setDidToken(didToken);
         }
       } catch (error) {
         // Handle errors if required!
@@ -47,7 +48,8 @@ const NavBar = () => {
 
   const handleSignOut = async (e) => {
     e.preventDefault();
-
+    // logiin out from
+    await magic.user.logout();
     try {
       const response = await fetch("/api/logout", {
         method: "POST",
@@ -71,7 +73,7 @@ const NavBar = () => {
           <a className={styles.logoLink}>
             <div className={styles.logoWrapper}>
               <Image
-                src={"/static/netflix.svg"}
+                src={"/netflix.svg"}
                 alt="DanFlix"
                 width="128px"
                 height="34px"
