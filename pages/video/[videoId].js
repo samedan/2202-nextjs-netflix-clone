@@ -16,15 +16,30 @@ Modal.setAppElement("#__next");
 
 export async function getStaticProps(context) {
   const videoId = context.params.videoId;
-  // console.log({ videoId });
-  const videoArray = await getYoutubeVideoById(videoId);
-  // console.log(videoArray);
 
+  // const { userId, token } = await useRedirectUser(context);
+  // const videos = await getMyList(userId, token);
+
+  // return {
+  //   props: {
+  //     myListVideos: videos,
+  //   },
+  // };
+
+  const videoArray = await getYoutubeVideoById(videoId);
+  console.log("videoArray");
+  console.log(videoArray);
+
+  // return {
+  //   props: {
+  //     video: videoArray.length > 0 ? videoArray[0] : {},
+  //   },
+  //   revalidate: 10, // In seconds
+  // };
   return {
     props: {
-      video: videoArray.length > 0 ? videoArray[0] : {},
+      video: videoArray[0],
     },
-    revalidate: 10, // In seconds
   };
 }
 
@@ -51,6 +66,7 @@ const Video = (props) => {
     channelTitle,
     statistics: { viewCount } = { viewCount: 0 },
   } = props.video;
+  console.log("props on [videoId] file");
   console.log(props.video);
 
   useEffect(async () => {

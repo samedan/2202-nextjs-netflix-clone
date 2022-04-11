@@ -15,8 +15,8 @@ const NavBar = () => {
         const { email, issuer } = await magic.user.getMetadata();
 
         const didToken = await magic.user.getIdToken();
-        console.log("didToken from navbar");
-        console.log({ didToken });
+        // console.log("didToken from navbar");
+        // console.log({ didToken });
         if (email) {
           setUsername(email);
           setDidToken(didToken);
