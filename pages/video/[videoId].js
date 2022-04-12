@@ -69,21 +69,24 @@ const Video = (props) => {
   // console.log("props on [videoId] file");
   // console.log(props.video);
 
-  useEffect(async () => {
-    const response = await fetch(`/api/stats?videoId=${videoId}`, {
-      method: "GET",
-    });
-    const data = await response.json();
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`/api/stats?videoId=${videoId}`, {
+        method: "GET",
+      });
+      const data = await response.json();
 
-    if (data.length > 0) {
-      const favourited = data[0].favourited;
-      if (favourited === 1) {
-        setToggleLike(true);
-      } else if (favourited === 0) {
-        setToggleDisLike(true);
+      if (data.length > 0) {
+        const favourited = data[0].favourited;
+        if (favourited === 1) {
+          setToggleLike(true);
+        } else if (favourited === 0) {
+          setToggleDisLike(true);
+        }
       }
     }
-  }, []);
+    fetchData();
+  }, [videoId]);
 
   const runRatingService = async (favourited) => {
     return await fetch("/api/stats", {
