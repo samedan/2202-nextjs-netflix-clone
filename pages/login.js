@@ -42,7 +42,7 @@ const Login = () => {
 
     if (email && email.match(mailformat)) {
       // route to dashboard
-      console.log({ email });
+      // console.log({ email });
       // if (email === "same.dan@gmail.com") {
       if (email) {
         // log in a user by their email
@@ -52,8 +52,8 @@ const Login = () => {
           const didToken = await magic.auth.loginWithMagicLink({
             email: email,
           });
-          console.log("didToken coming from Magic");
-          console.log({ didToken });
+          // console.log("didToken coming from Magic");
+          // console.log({ didToken });
           if (didToken) {
             // setIsLoading(false); fix loading hanging on magik
             const response = await fetch("/api/login", {
@@ -66,7 +66,7 @@ const Login = () => {
 
             const loggedInResponse = await response.json();
             if (loggedInResponse.done) {
-              console.log({ loggedInResponse });
+              // console.log({ loggedInResponse });
               setIsInvisible(false);
               router.push("/");
             } else {

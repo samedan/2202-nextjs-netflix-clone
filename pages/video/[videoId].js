@@ -27,8 +27,8 @@ export async function getStaticProps(context) {
   // };
 
   const videoArray = await getYoutubeVideoById(videoId);
-  console.log("videoArray");
-  console.log(videoArray);
+  // console.log("videoArray");
+  // console.log(videoArray);
 
   // return {
   //   props: {
@@ -66,8 +66,8 @@ const Video = (props) => {
     channelTitle,
     statistics: { viewCount } = { viewCount: 0 },
   } = props.video;
-  console.log("props on [videoId] file");
-  console.log(props.video);
+  // console.log("props on [videoId] file");
+  // console.log(props.video);
 
   useEffect(async () => {
     const response = await fetch(`/api/stats?videoId=${videoId}`, {
