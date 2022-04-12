@@ -15,7 +15,9 @@ import useRedirectUser from "./../utils/redirectUser";
 
 // on Server Side
 export async function getServerSideProps(context) {
+  /*eslint-disable */
   const { userId, token } = await useRedirectUser(context);
+  /*eslint-enable */
 
   const disneyVideos = await getVideos("disney trailer");
   const watchItAgainVideos = await getWatchItAgainVideos(userId, token);
