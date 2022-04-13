@@ -15,10 +15,10 @@ export async function middleware(req) {
     return NextResponse.next();
   }
   if (!token && pathname !== "/login") {
-    // const url = req.nextUrl.clone();
-    const url = `${process.env.DEPLOY_VERCEL_URL}/login`;
+    const url = req.nextUrl.clone();
+    // const url = `${process.env.DEPLOY_VERCEL_URL}/login`;
     // console.log({ url });
-    // url.pathname = "/login";
+    url.pathname = "/login";
     return NextResponse.rewrite(url);
   }
 }
