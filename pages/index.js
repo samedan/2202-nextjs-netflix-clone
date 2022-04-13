@@ -9,8 +9,8 @@ import {
   getVideos,
   getWatchItAgainVideos,
 } from "../lib/videos";
-import { startFetchMyQuery } from "../lib/db/hasura";
-import { verifyToken } from "../lib/utils";
+// import { startFetchMyQuery } from "../lib/db/hasura";
+// import { verifyToken } from "../lib/utils";
 import useRedirectUser from "./../utils/redirectUser";
 
 // on Server Side

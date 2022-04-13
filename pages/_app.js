@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { magic } from "./../lib/magic-client";
+
 import Loading from "./../components/loading/loading";
+import { magic } from "./../lib/magic-client";
 
 function MyApp({ Component, pageProps }) {
   // if logged in route to /
@@ -10,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(async () => {
+  // useEffect(() => {
   //   async function fetchData() {
   //     // You can await here
   //     const isLoggedIn = await magic.user.isLoggedIn();
@@ -22,7 +23,7 @@ function MyApp({ Component, pageProps }) {
   //     }
   //   }
   //   fetchData();
-  // }, []);
+  // }, [router]);
 
   // to fix the hanging after Loading Magic token
   useEffect(() => {
